@@ -1,7 +1,8 @@
 <template>
   <div class="container jumbotron">
     <h1 class="display-4">Fast Typing</h1>
-    <p class="lead">Let's Try This App.</p>
+    <p class="lead">
+QuickTyper is a web application that measures how quickly you can type words within a given time limit. </p>
     <hr class="my-4" />
     <div v-if="isFinish" class="alert alert-primary">
       <h3>Game has finished</h3>
