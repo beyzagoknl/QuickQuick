@@ -3,7 +3,7 @@
   <div class="container jumbotron">
     <h1 class="display-4">Fast Typing</h1>
     <p class="lead">
-Are you fast in the "Fast and Furious?". How many words can you type a minute? Write the highlighted word and press the spacebar.Show your speed to everyone! </p>
+Are you fast in the "Fast and Furious?". How many words can you type a minute? Write the highlighted word and press the spacebar.Show your speed to everyone!!! </p>
     <hr class="my-4" />
     <div v-if="isFinish" class="alert alert-primary">
       <h3>Game has finished</h3>
