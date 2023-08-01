@@ -1,4 +1,5 @@
 <template>
+<div class="bg-image img">
   <div class="container jumbotron">
     <h1 class="display-4">Fast Typing</h1>
     <p class="lead">
@@ -6,8 +7,8 @@ QuickTyper is a web application that measures how quickly you can type words wit
     <hr class="my-4" />
     <div v-if="isFinish" class="alert alert-primary">
       <h3>Game has finished</h3>
-      <p class="display-4">{{totalWord}}</p>
-      <span>Your correct answer: %{{truePercent}}</span><br>
+      <p class="display-4"> You wrote : {{totalWord}} words</p>
+      <span>Your correct answer's percent: %{{truePercent}}</span><br>
      <span>Correct Answer : {{trueCount}}</span><br>
      <span>Wrong Answer : {{falseCount}}</span><br>
      <button @click="newGame" class="btn btn-success mt-5 btn-lg btn-block"  type="button">
@@ -29,20 +30,22 @@ QuickTyper is a web application that measures how quickly you can type words wit
       </div>
 
       <div class="card">
-        <div class="card-body bg-secondary">
+        <div class="card-body bg-secondary mt-3">
           <div class="input-group input-group-lg">
             <input type="text" class="form-control" v-model="writingWord" /><br>
-            <div class="input-group-append">
-              <button class="btn btn-light" disabled type="button">
+          </div>
+           <div class="button-group buttons" role="group">
+              <button class="btn btn-light timer" disabled type="button">
                 {{timer}} seconds
               </button>
               <button :disabled="isRunning" class="btn btn-light" type="button" @click="getWords" >Refresh</button>
-            </div>
-          </div>
+            </div> 
+          <br>
         </div>
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -56,7 +59,7 @@ export default {
       isTrue: true,
       trueCount: 0,
       falseCount: 0,
-      timer: 60,
+      timer: 5,
       interval: false,
       isRunning: false,
       isFinish: false,
@@ -94,7 +97,7 @@ export default {
     truePercent(){
       const percent = (100/this.totalWord);
       const val=(percent*this.trueCount);
-      return isNaN(val) ? 0 : val;
+      return isNaN(val) ? 0 : val.toFixed(2);
     }
   },
 
@@ -107,7 +110,7 @@ export default {
     newGame(){
       this.getWords();
       this.isFinish=false;
-      this.timer=60;
+      this.timer=5;
       this.isTrue=true;
       this.isRunning=false;
     },
@@ -132,12 +135,34 @@ export default {
 
 
 <style>
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+:root {
+  --light: hwb(0 4% 54%);
+  --dark: #5b1a02;
+}
+.img {
+  background-image: url('~@/assets/image.jpg');
+ height: 100vh;
+}
 .words {
   font-size: 25px;
   font-weight: 400;
   margin-left: 4px;
+  min-width: 100%;
+  max-height: 100%;
 }
-
+.buttons{
+  margin-top:3rem;
+  
+}
+.timer{
+  margin-left:2rem;
+  margin-right:2rem;
+}
 .writing-word {
   background-color: gray;
   color: white;
