@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <MainPage />
 </template>
 
@@ -11,4 +11,17 @@ export default {
     MainPage,
   },
 };
+</script> -->
+<template>
+ <TopNavigation />
+  <router-view/>
+</template>
+
+<script setup>
+  import TopNavigation from "../src/components/structure/TopNavigation.vue"
 </script>
+<style>
+
+</style>
+
+ 
