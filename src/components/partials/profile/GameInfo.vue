@@ -13,6 +13,7 @@
               <th>Point</th>
               <th>Correct</th>
               <th>Wrong</th>
+              <th>Delete</th>
             </tr>
             <tr  v-for='(result, index) in results' :key='result.id' >
               <td>{{index + 5}}</td>
@@ -20,6 +21,7 @@
               <td>{{result.point}}</td>
               <td>{{result.correct}}</td>
               <td>{{result.wrong}}</td>
+              <td>Delete</td>
             </tr>
           </table>
           </div>

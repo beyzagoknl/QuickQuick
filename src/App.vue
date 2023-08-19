@@ -20,8 +20,6 @@ export default {
 <script setup>
   import TopNavigation from "../src/components/structure/TopNavigation.vue"
 </script>
-<style>
 
-</style>
 
  

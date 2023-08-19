@@ -1,5 +1,6 @@
 <template>
 <div class="bg-image img">  
+  
   <div class="
   container
    mx-auto
@@ -9,22 +10,12 @@
    md:py-16 
    md:px-8 
    mb-8 
-   bg-gray-200 
+   bg-gray-100 
    rounded
    "
    >
-
-
-    <h1 class="text-4xl">Fast Typing</h1>
-    <img :src="require('../assets/image.jpg')"/>
-    <p class="text-xl font-light">
-Are you fast in the "Fast and Furious?". How many words can you type a minute? Write the highlighted word and press the spacebar.Show your speed to everyone!!! </p>
-<input type="radio" id="english" value="English" v-model="picked" />
-<label for="english">English</label>
-
-<input type="radio" id="dutch" value="Dutch" v-model="picked" />
-<label for="dutch">Dutch</label>
-    <hr class="my-4" />
+    <h1 class="text-4xl">
+    Fast Typing</h1>
     <div v-if="isFinish" class="
     relative 
     px-3 
@@ -32,32 +23,42 @@ Are you fast in the "Fast and Furious?". How many words can you type a minute? W
     mb-4 
     border 
     rounded 
-    bg-blue-200 
+    bg-purple-200 
     border-blue-300 
-    text-blue-800
+    text-gray-900
     "
     >
       <h3>Game has finished</h3>
       <p class="text-4xl"> You wrote : {{totalWord}} words</p>
+      <p class="text-4xl"> You got : {{totalPoint}} points</p>
       <span>Your correct answer's percent: %{{truePercent}}</span><br>
      <span>Correct Answer : {{trueCount}}</span><br>
      <span>Wrong Answer : {{falseCount}}</span><br>
-      <RouterLinkButton
-        class="w-full text-red-900 text-center text-m mt-5 pb-1"
+     <div class="flex justify-between mt-5">
+           <RouterLinkButton
+        class="text-red-900 text-center text-m mt-5 pb-1"
         btnText="New Game"
         color="red"
         url="/game"
         @click="newGame"
         />
            <RouterLinkButton
-        class="w-full text-red-900 text-center text-m mt-5 pb-1"
+        class="text-red-900 text-center text-m mt-5 pb-1"
         btnText="My Profile"
         color="green"
         url="/account/profile"
         />
-
     </div>
+     </div>
     <div v-else>
+    <p class="text-xl font-light">  
+Are you fast in the "Fast and Furious?". How many words can you type a minute? Write the highlighted word and press the spacebar.Show your speed to everyone!!! </p>
+<input type="radio" id="english" value="English" v-model="picked" />
+<label for="english">English</label>
+
+<input type="radio" id="dutch" value="Dutch" v-model="picked" />
+<label for="dutch">Dutch</label>
+    <hr class="my-4" />
       <div class="
       relative 
       flex 
@@ -146,6 +147,7 @@ import  RouterLinkButton  from "../components/global/RouterLinkButton.vue";
 import axios from 'axios';
 //import { useRouter } from 'vue-router';
 import {useUserStore} from '../store/user-storage';
+const apiBaseUrl = process.env.VUE_APP_API_BASE_URL;
 
 //const router = useRouter()
 const userStore = useUserStore();
@@ -155,6 +157,7 @@ const writingWord = ref(null);
 const isTrue = ref(true);
 const trueCount = ref(0);
 const falseCount = ref(0);
+const totalPoint = ref(0)
 const timer = ref(60);
 const interval = ref(null);
 const isRunning = ref(false);
@@ -237,27 +240,27 @@ const timeProcess = () => {
 };
 
 const finishGame = async() => {
-  
+
+  const correctPointValue = 3
+  const wrongPointValue = 1
+
+  totalPoint.value = (trueCount.value * correctPointValue ) - (falseCount.value * wrongPointValue) 
+
+  if (totalPoint.value <= 0 ){
+    totalPoint.value = 0
+  }
+
+
   const result = {
     'user_id':userStore.id,
-    'point': totalWord.value,
+    'point': totalPoint.value,
     'correct': trueCount.value,
     'wrong': falseCount.value
   }
   try{
-    let res = await axios.post('http://127.0.0.1:8005/api/result', result)
-
-     if (res) {
-      //axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token
-      //router.push('/account/profile/')
-
-    } else {
-      console.error('We cannot record your result', res);
-    }
-
+    await axios.post(`${apiBaseUrl}/result`, result)
   }catch(err) {
       console.error('Response data is undefined:');
-
   }
   clearInterval(interval.value);
   isFinish.value = true;
@@ -274,10 +277,11 @@ const finishGame = async() => {
   --light: hwb(0 4% 54%);
   --dark: #5b1a02;
 }
-.img {
+.img { 
   background-image: url('~@/assets/image.jpg');
-
-
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
 }
 .words {
   font-size: 25px;

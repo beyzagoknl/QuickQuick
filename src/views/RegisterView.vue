@@ -85,6 +85,7 @@ import TextInput from '@/components/global/TextInput.vue';
 import axios from 'axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+const apiBaseUrl = process.env.VUE_APP_API_BASE_URL;
 
 import {useUserStore} from '../store/user-storage';
 const router = useRouter()
@@ -116,7 +117,7 @@ const register = async () => {
 
 
   try{
-    let res = await axios.post('http://127.0.0.1:8005/api/register', formData)
+    let res = await axios.post(`${apiBaseUrl}/register`, formData)
 
      if (res.data && res.data.user) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token

@@ -25,9 +25,9 @@
          v-if=userStore.id
          @click="open = !open"
           class="w-full text-green-100 text-center text-lg mt-2"
-          btnText="Posts"
+          btnText="Play Game"
           color="yellow"
-          url="/account/posts"
+          url="/game"
         />
 
         <RouterLinkButton
@@ -71,6 +71,7 @@ import { useUserStore } from '@/store/user-storage'; // Adjust the import path
 import { useRouter } from 'vue-router';
 const router = useRouter()
 const userStore = useUserStore();
+const apiBaseUrl = process.env.VUE_APP_API_BASE_URL;
 
 let errors = ref([]);
 let open = ref(false);
@@ -78,15 +79,15 @@ let open = ref(false);
 const logout = async () => {
 
  try {
-    let res = await axios.post('http://127.0.0.1:8000/api/logout', {
+     await axios.post(`${apiBaseUrl}/logout`, {
       user_id: userStore.id,
     });
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token
+    userStore.clearUser()
       router.push('/')
       open.value = !open.value
-      userStore.clearUser()
   } catch (err) {
     errors.value = err.response.data.errors;
+    console.log(err)
   }
 
 };

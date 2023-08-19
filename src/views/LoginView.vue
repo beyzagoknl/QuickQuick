@@ -52,10 +52,13 @@ import axios from "axios";
 import { ref } from 'vue';
 import { useUserStore } from '@/store/user-storage'; // Adjust the import path
 import { useRouter } from 'vue-router';
+import { useResultsStore } from '@/store/result-storage';
 const router = useRouter()
+const apiBaseUrl = process.env.VUE_APP_API_BASE_URL;
+//import { setUserLocalStorage } from "@/axios.js";
 
 const userStore = useUserStore();
-
+const resultsStore = useResultsStore()
 let errors = ref([]);
 let email = ref('');
 let password = ref('');
@@ -72,10 +75,13 @@ const login = async () => {
     invalidError.value = "Please enter your credentials"
   }
  try {
-    let res = await axios.post('http://127.0.0.1:8005/api/login', formData);
+    let res = await axios.post(`${apiBaseUrl}/login`, formData);
     if (res.data && res.data.user) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token
+      const token = res.data.token;
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
       userStore.setUserDetails(res.data);
+      await resultsStore.fetchResults(userStore.id)
+      await console.log(userStore.id)
       router.push('/account/profile/')
     } else {
       console.error('Response data or user is undefined:', res);

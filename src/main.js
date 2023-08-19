@@ -2,13 +2,12 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import {router} from './router';
 import axios from 'axios';
+import 'chart.js';
 
-// import "bootstrap/dist/css/bootstrap.min.css";
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 axios.defaults.withCredentials = true;
-// axios.defaults.baseURL
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
