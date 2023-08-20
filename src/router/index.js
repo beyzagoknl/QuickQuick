@@ -4,7 +4,7 @@ import RegisterView from "../views/RegisterView.vue"
 import LoginView from "../views/LoginView.vue"
 import GameView from "../views/GameView.vue"
 import ProfileSection from '../views/account/ProfileSection.vue'
-import EditProfile from '../views/account/EditProfile.vue'
+import TopResults from '../views/account/TopResults.vue'
 
 
 const routes=[
@@ -38,9 +38,9 @@ const routes=[
         component: ProfileSection
       },
       {
-        path: 'edit-profile',
-        name: 'EditProfile',
-        component: EditProfile
+        path: 'topResults',
+        name: 'TopResults',
+        component: TopResults
     }
  
     ]

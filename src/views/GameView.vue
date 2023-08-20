@@ -262,8 +262,46 @@ const toggleTimer = () => {
   interval.value = setInterval(timeProcess, 1000);
 };
 
+const sendResultToBackend = async () => {
+  const correctPointValue = 3;
+  const wrongPointValue = 1;
+
+  totalPoint.value = (trueCount.value * correctPointValue) - (falseCount.value * wrongPointValue);
+
+  if (totalPoint.value <= 0) {
+    totalPoint.value = 0;
+  }
+
+  const result = {
+    'user_id': userStore.id,
+    'point': totalPoint.value,
+    'correct': trueCount.value,
+    'wrong': falseCount.value
+  };
+
+  try {
+    await axios.post(`${apiBaseUrl}/result`, result);
+  } catch (err) {
+    console.error('Error sending results to backend:', err);
+  }
+
+  try {
+    let res = await axios.get(`${apiBaseUrl}/users/${userStore.id}/results`);
+    await resultsStore.updateResults(res.data);
+  } catch (error) {
+    console.error("Error fetching results:", error);
+  }
+};
+
+const finishGame = async () => {
+  sendResultToBackend();
+  clearInterval(interval.value);
+  isFinish.value = true;
+  timer.value = 0;
+};
 const timeProcess = () => {
   if (timer.value === 0) {
+    sendResultToBackend();
     clearInterval(interval.value);
     isFinish.value = true;
     return;
@@ -271,41 +309,7 @@ const timeProcess = () => {
   timer.value--;
 };
 
-const finishGame = async() => {
 
-  const correctPointValue = 3
-  const wrongPointValue = 1
-
-  totalPoint.value = (trueCount.value * correctPointValue ) - (falseCount.value * wrongPointValue) 
-
-  if (totalPoint.value <= 0 ){
-    totalPoint.value = 0
-  }
-
-  const result = {
-    'user_id':userStore.id,
-    'point': totalPoint.value,
-    'correct': trueCount.value,
-    'wrong': falseCount.value
-  }
-  try{
-    await axios.post(`${apiBaseUrl}/result`, result)
-  }catch(err) {
-      console.error('Response data is undefined:');
-  }
-
-    try {
-        let res = await axios.get(`${apiBaseUrl}/users/${userStore.id}/results`)
-           await resultsStore.updateResults(res.data)
-      } catch (error) {
-        console.error("Error fetching results:", error);
-      }
-
-
-  clearInterval(interval.value);
-  isFinish.value = true;
-  timer.value = 0;
-};
 </script>
 <style>
 :root {

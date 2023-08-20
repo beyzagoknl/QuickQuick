@@ -5,12 +5,15 @@
         <h1 class="text-2xl md:text-4xl text-left text-gray-900">{{ firstName }} {{ lastName }}</h1>
       </div>
       <div class="w-1/2">
-         <img src="../../assets.baby.jpg" alt="User Image" />
+         <img :src="getImageBasedOnPoint(lastPoint)" alt="User Image" />
       </div>
     </div>
     <div class="flex">
       <div class="w-1/2 mt-2">
         <RouterLinkButton btnText="Play Game" color="red" url="/game" />
+      </div>
+       <div class="w-1/2 mt-2">
+        <RouterLinkButton btnText="Top Results" color="pink" url="/account/topResults" />
       </div>
       <div class="w-1/2 mt-2">
         <RouterLinkButton :btnText="chartVisible ? 'Hide Chart' : 'Show Chart'" color="red" @click="toggleChart" v-if="results.length != 0"/>
@@ -209,32 +212,28 @@ const confirmDeleteAll = async () => {
   }
 };
 
-const highestPoint = results.value.reduce((maxPoint, obj) => {
-    return Math.max(maxPoint, obj.point);
-}, -Infinity);
+const lastResult = results.value[0]
+const lastPoint = lastResult ? lastResult.point : undefined
 
-console.log("The highest point value is:", highestPoint);
 
-// const getImageBasedOnPoint = (point) => {
-//   let imageUrl = '../../assets/baby.jpg';
+console.log("The highest point value is:", lastPoint);
 
-//   switch (true) {
-//     case (point >= 1 && point <= 10):
-//       imageUrl = '../../assets/turtle.jpg';
-//       break;
-//     case (point <= 20):
-//       imageUrl = '../../assets/rabbit.jpg';
-//       break;
-//     case (point <= 30):
-//       imageUrl = '@/assets/panther.jpg';
-//       break;
-//     case (point <= 40):
-//       imageUrl = '@/assets/panther.jpg';
-//       break;
-//     default:
-//       imageUrl = '@/assets/baby.jpg';
-//   }
-
-//   return imageUrl;
-// };
+const getImageBasedOnPoint = (point) => {
+switch (true) {
+  case point === 0 || point === undefined:
+    return require('@/assets/baby.jpg');
+  case point <= 10:
+    return require('@/assets/turtle.jpg');
+  case point <= 20:
+    return require('@/assets/rabbit.jpg');
+  case point <= 30:
+    return require('@/assets/eagle.jpg');
+  case point <= 40:
+    return require('@/assets/panther.jpg');
+  case point <= 50:
+    return require('@/assets/cheetah.jpg');
+  default:
+    return require('@/assets/baby.jpg');
+}
+};
 </script>
