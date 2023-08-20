@@ -1,9 +1,14 @@
 <template>
   <div class="container max-w-4xl mx-auto mt-10 bg-blue-100">
-    <div class="flex">
+ <div class="flex items-center justify-between">
       <div class="w-1/2">
         <h1 class="text-2xl md:text-4xl text-left text-gray-900">{{ firstName }} {{ lastName }}</h1>
       </div>
+      <div class="w-1/2">
+         <img src="../../assets.baby.jpg" alt="User Image" />
+      </div>
+    </div>
+    <div class="flex">
       <div class="w-1/2 mt-2">
         <RouterLinkButton btnText="Play Game" color="red" url="/game" />
       </div>
@@ -106,12 +111,9 @@ console.log("here is " + userStore.token)
 const results = ref([])
 results.value = resultStore.results
 
+
 const showResult = ref(true)
 const chartVisible =ref(false)
-
-if(results.value.length === 0) [
-  console.log("zeroooo")
-]
 
 const createChart =()=> {
 
@@ -207,6 +209,32 @@ const confirmDeleteAll = async () => {
   }
 };
 
+const highestPoint = results.value.reduce((maxPoint, obj) => {
+    return Math.max(maxPoint, obj.point);
+}, -Infinity);
 
+console.log("The highest point value is:", highestPoint);
+
+// const getImageBasedOnPoint = (point) => {
+//   let imageUrl = '../../assets/baby.jpg';
+
+//   switch (true) {
+//     case (point >= 1 && point <= 10):
+//       imageUrl = '../../assets/turtle.jpg';
+//       break;
+//     case (point <= 20):
+//       imageUrl = '../../assets/rabbit.jpg';
+//       break;
+//     case (point <= 30):
+//       imageUrl = '@/assets/panther.jpg';
+//       break;
+//     case (point <= 40):
+//       imageUrl = '@/assets/panther.jpg';
+//       break;
+//     default:
+//       imageUrl = '@/assets/baby.jpg';
+//   }
+
+//   return imageUrl;
+// };
 </script>
-
