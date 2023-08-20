@@ -22,23 +22,7 @@ export const useUserStore = defineStore('user', {
     this.$state.location = res.user.location
     this.$state.description = res.user.description
    },
-  //  async fetchUser() {
-  //   try {
-  //     let res = await axios.get('http://127.0.0.1:8000/api/users/' + this.$state.id);
-  //     if (res.data && res.data.user) {
-  //       this.$state.id = res.data.user.id;
-  //       this.$state.firstName = res.data.user.first_name;
-  //       this.$state.lastName = res.data.user.last_name;
-  //       this.$state.location = res.data.user.location;
-  //      this.$state.description = res.data.user.description;
-  //     } else {
-  //       console.error('Response data is undefined:', res);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching user:', error);
-  //   }
-  // },
-  
+
    clearUser(){
     this.$state.id = null
     this.$state.token = null

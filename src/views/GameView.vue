@@ -51,13 +51,41 @@
     </div>
      </div>
     <div v-else>
-    <p class="text-xl font-light">  
-Are you fast in the "Fast and Furious?". How many words can you type a minute? Write the highlighted word and press the spacebar.Show your speed to everyone!!! </p>
-<input type="radio" id="english" value="English" v-model="picked" />
-<label for="english">English</label>
+      <p class="text-xl font-light">
+    Stay motivated and type fast to improve your typing skills! The rules are simple:
+  </p>
+  <ul class="list-disc list-inside text-xl font-light mt-4">
+    <li>You have 60 seconds to type as many words as you can.</li>
+    <li>You can choose between Dutch and English languages.</li>
+    <li>Press the spacebar to move to the next word.</li>
+    <li>For each correct word, you will earn 3 points.</li>
+    <li>If you make a mistake, 1 point will be deducted from your score.</li>
+  </ul>
+<div class="space-x-4 mt-4">
+  <label class="inline-flex items-center cursor-pointer">
+    <input
+      type="radio"
+      id="english"
+      value="English"
+      v-model="picked"
+      @change="getWords"
+      class="form-radio text-blue-500"
+    />
+    <span class="ml-2">English</span>
+  </label>
 
-<input type="radio" id="dutch" value="Dutch" v-model="picked" />
-<label for="dutch">Dutch</label>
+  <label class="inline-flex items-center cursor-pointer">
+    <input
+      type="radio"
+      id="dutch"
+      value="Dutch"
+      v-model="picked"
+      @change="getWords"
+      class="form-radio text-blue-500"
+    />
+    <span class="ml-2">Dutch</span>
+  </label>
+</div>
     <hr class="my-4" />
       <div class="
       relative 
@@ -145,13 +173,12 @@ import wordList from "@/assets/wordlist.json";
 import wordListDutch from "@/assets/wordlistDutch.json";
 import  RouterLinkButton  from "../components/global/RouterLinkButton.vue";
 import axios from 'axios';
-//import { useRouter } from 'vue-router';
 import {useUserStore} from '../store/user-storage';
+import { useResultsStore } from '@/store/result-storage';
 const apiBaseUrl = process.env.VUE_APP_API_BASE_URL;
 
-//const router = useRouter()
 const userStore = useUserStore();
-
+const resultsStore = useResultsStore()
 const words = ref([]);
 const writingWord = ref(null);
 const isTrue = ref(true);
@@ -174,9 +201,12 @@ const truePercent = computed(() => {
 });
 
 onMounted(() => {
-  getWords();
+  getWords('English');
 });
 
+watch(picked, (newLanguage) => {
+  getWords(newLanguage);
+});
 
 watch(writingWord, (val) => {
   if (!val || val === ' ') {
@@ -210,10 +240,12 @@ const newGame = () => {
   falseCount.value = 0;
 };
 
-const getWords = () => {
-  if (picked.value === "English") {
+const getWords = (defaultLanguage = null) => {
+    const selectedLanguage = picked.value || defaultLanguage;
+
+   if (selectedLanguage === "English") {
     wordListData.value = wordList;
-  } else if (picked.value === "Dutch") {
+  } else if (selectedLanguage === "Dutch") {
     wordListData.value = wordListDutch;
   }
 
@@ -250,7 +282,6 @@ const finishGame = async() => {
     totalPoint.value = 0
   }
 
-
   const result = {
     'user_id':userStore.id,
     'point': totalPoint.value,
@@ -262,16 +293,20 @@ const finishGame = async() => {
   }catch(err) {
       console.error('Response data is undefined:');
   }
+
+    try {
+        let res = await axios.get(`${apiBaseUrl}/users/${userStore.id}/results`)
+           await resultsStore.updateResults(res.data)
+      } catch (error) {
+        console.error("Error fetching results:", error);
+      }
+
+
   clearInterval(interval.value);
   isFinish.value = true;
   timer.value = 0;
 };
-
- 
 </script>
-
-
-
 <style>
 :root {
   --light: hwb(0 4% 54%);

@@ -8,27 +8,28 @@
         <RouterLinkButton btnText="Play Game" color="red" url="/game" />
       </div>
       <div class="w-1/2 mt-2">
-        <RouterLinkButton btnText="Show Chart" color="red" @click="createChart" v-if="showResult"/>
+        <RouterLinkButton :btnText="chartVisible ? 'Hide Chart' : 'Show Chart'" color="red" @click="toggleChart" v-if="results.length != 0"/>
       </div>
-      <div class="w-1/2 mt-2" v-if="showResult && !showDeleteAllButton">
-        <RouterLinkButton btnText="My Results" color="blue" @click="getResult" />
-      </div>
-      <div class="w-1/2 mt-2" v-if="showDeleteAllButton">
-        <RouterLinkButton btnText="Delete Results" color="red" @click="confirmDeleteAll" />
+      <div class="w-1/2 mt-2">
+        <RouterLinkButton btnText="Delete Results" color="red" @click="confirmDeleteAll" v-if="results.length != 0" />
       </div>
     </div>
   </div>
+    <div v-if="results.length === 0">
+    <h1>
+    There is no result! Play a game!
+    </h1>
+  </div>
   <div>
-  <div v-if="showChart">
+  <div v-if="chartVisible && results.length > 0">
   <div class="container max-w-4xl mx-auto mt-4">
     <Line :data="data" :options="options"/>
   </div>
   </div>
   </div>
-  <div v-if="showResult">
+  <div v-if="showResult && results.length > 0">
     <div class="ms-auto py-4 ml-4">
       <div class="font-bold text-gray-900">
-        <div class="text-xl">Game Results</div>
         <div class="mt-4">
           <div class="relative overflow-x-auto">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -54,10 +55,6 @@
               </tbody>
             </table>
           </div>
-          <div v-if="results.length == 0">
-          <p>
-          There is no result! Click on My Results button or play a game!
-          </p></div>
         </div>
       </div>
     </div>
@@ -67,8 +64,6 @@
 
 <script setup>
 import RouterLinkButton from "../../components/global/RouterLinkButton.vue";
-//import ProfileAboutSection from "../../components/partials/profile/ProfileAboutSection.vue";
-//import GameInfo from "../../components/partials/profile/GameInfo.vue"
 import { useUserStore } from '@/store/user-storage'; 
 import {useResultsStore} from '@/store/result-storage'
 import axios from 'axios';
@@ -76,7 +71,6 @@ import Swal from 'sweetalert2';
 import moment from 'moment'
 import { ref} from 'vue';
 const apiBaseUrl = process.env.VUE_APP_API_BASE_URL;
-const showDeleteAllButton = ref(false);
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -108,11 +102,45 @@ const firstName = userStore.firstName
 const lastName = userStore.lastName
 
 console.log("here is " + userStore.token)
-console.log(resultStore.results)
 
 const results = ref([])
+results.value = resultStore.results
+
 const showResult = ref(true)
-const showChart = ref(false)
+const chartVisible =ref(false)
+
+if(results.value.length === 0) [
+  console.log("zeroooo")
+]
+
+const createChart =()=> {
+
+const formattedLabels = results.value.map(result => moment(result.created_at).format('DD-MM-YYYY HH:mm:ss'));
+const formattedData = results.value.map(result => result.point);
+const reversedLabels = formattedLabels.slice().reverse();
+const reversedData = formattedData.slice().reverse();
+
+  data.value = {
+  labels: reversedLabels,
+  datasets: [
+    {
+      label: 'Points',
+      backgroundColor: '#f87979',
+      data: reversedData
+    },
+  ],
+}
+options.value = {
+  responsive: true,
+  maintainAspectRatio: false,
+};
+}
+const toggleChart = () => {
+  chartVisible.value = !chartVisible.value;
+  if (chartVisible.value) {
+    createChart(); 
+  }
+};
 
 const data = ref({
   labels: [],
@@ -127,37 +155,8 @@ const data = ref({
 const options =ref({
   responsive: true,
   maintainAspectRatio: false,
-
 })
 
-results.value = resultStore.results
-
-
-const getResult = async() => {
-
- showResult.value = true;
-  showDeleteAllButton.value = true;
-  
-  // try{
-  //   let res = await axios.get(`${apiBaseUrl}/users/${userStore.id}/results`)
-
-  //    if (res) {
-  //     axios.defaults.headers.common['Authorization'] = 'Bearer ' + userStore.token
-  
-  // console.log("my token2 "+ userStore.token)
-
-  //     results.value = await res.data
-  //     console.log(results.value.length)
-    
-  //   } else {
-  //     console.error('We cannot record your result', res);
-  //   }
-
-  // }catch(err) {
-  //     console.error('Response data is undefined:', err);
-
-  // }
-}
 const deleteResult = async (resultId) => {
   try {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + userStore.token;
@@ -166,6 +165,7 @@ const deleteResult = async (resultId) => {
     if (res.status === 204) {
       results.value = results.value.filter(result => result.id !== resultId);
       console.log(resultId + " deleted")
+      createChart()
     } else {
       console.error('Failed to delete result', res);
     }
@@ -179,9 +179,9 @@ const deleteAllResults = async () => {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + userStore.token;
 
     await axios.delete(`${apiBaseUrl}/users/${userStore.id}/deleteAll/results`);
-    results.value = (null)
-    showDeleteAllButton.value = false
+    results.value = ([])
     showResult.value = false
+    await resultStore.updateResults(results.value)
   } catch (err) {
     console.error('Error deleting results:', err);
   }
@@ -201,31 +201,11 @@ const confirmDeleteAll = async () => {
 
   if (result.isConfirmed) {
     await deleteAllResults();
+    createChart()
+    results.value = ([])
     Swal.fire('Deleted!', 'All results have been deleted.', 'success');
   }
 };
-
-const createChart =()=> {
-
-  showChart.value = true
-
-  data.value = {
-  labels: results.value.map(result => moment(result.created_at).format('DD-MM-YYYY HH:mm:ss')),
-  datasets: [
-    {
-      label: 'Points',
-      backgroundColor: '#f87979',
-      data: results.value.map(result => result.point)
-    },
-  ],
-}
-console.log(data.value.datasets.data)
-options.value = {
-  responsive: true,
-  maintainAspectRatio: false,
-};
-
-}
 
 
 </script>

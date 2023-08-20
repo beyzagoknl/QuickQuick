@@ -81,7 +81,6 @@ const login = async () => {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
       userStore.setUserDetails(res.data);
       await resultsStore.fetchResults(userStore.id)
-      await console.log(userStore.id)
       router.push('/account/profile/')
     } else {
       console.error('Response data or user is undefined:', res);

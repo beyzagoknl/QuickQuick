@@ -88,9 +88,12 @@ import { useRouter } from 'vue-router';
 const apiBaseUrl = process.env.VUE_APP_API_BASE_URL;
 
 import {useUserStore} from '../store/user-storage';
+import { useResultsStore } from '@/store/result-storage';
+
 const router = useRouter()
 
 const userStore = useUserStore();
+const resultsStore = useResultsStore()
 
 
 let errors = ref([])
@@ -122,7 +125,8 @@ const register = async () => {
      if (res.data && res.data.user) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token
       userStore.setUserDetails(res.data);
-        router.push('/account/profile/')
+      await resultsStore.fetchResults(userStore.id)
+      router.push('/game')
 
     } else {
       console.error('Response data or user is undefined:', res);
@@ -135,7 +139,5 @@ const register = async () => {
 }
 
 </script>
-
-
 <style>
 </style>
