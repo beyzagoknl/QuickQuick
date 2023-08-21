@@ -6,7 +6,7 @@
       >
         <b>Quick Quick</b>
       </h1>
-      <p class="pt-2 text-xl text-center text-gray-300">
+      <p class="pt-2 text-xl text-center text-gray-300 ">
         Login or Register now and join other like minded people all around the
         world who want to share there ability.
       </p>
@@ -42,12 +42,15 @@ export default {};
 
 <style>
 #centerCalLToAction {
-  width: 100%;
+  width: 50%;
   position: absolute;
   left: 50%;
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+  
+ 
+  
  
 }
 #myVideo {
