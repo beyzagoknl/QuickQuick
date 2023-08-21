@@ -4,7 +4,6 @@ import RegisterView from "../views/RegisterView.vue"
 import LoginView from "../views/LoginView.vue"
 import GameView from "../views/GameView.vue"
 import ProfileSection from '../views/account/ProfileSection.vue'
-import TopResults from '../views/account/TopResults.vue'
 
 
 const routes=[
@@ -37,11 +36,7 @@ const routes=[
         name: 'ProfileSection',
         component: ProfileSection
       },
-      {
-        path: 'topResults',
-        name: 'TopResults',
-        component: TopResults
-    }
+      
  
     ]
   },

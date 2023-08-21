@@ -1,11 +1,16 @@
 <template>
-  <div class="container max-w-4xl mx-auto mt-10 bg-blue-100">
+<div class="bg-image img">
+  <div class="container max-w-4xl mx-auto mt-10 bg-beyza-100 ">
  <div class="flex items-center justify-between">
+ 
       <div class="w-1/2">
-        <h1 class="text-2xl md:text-4xl text-left text-gray-900">{{ firstName }} {{ lastName }}</h1>
+        <h1 class="text-2xl md:text-4xl text-left ml-2 text-white">{{ firstName }} {{ lastName }}</h1>
+        <div>
+          <img id="imageSection" :src="getImageBasedOnPoint(lastPoint)" alt="User Image" />
+        </div>
       </div>
-      <div class="w-1/2">
-         <img :src="getImageBasedOnPoint(lastPoint)" alt="User Image" />
+      <div class="w-1/2 ">
+      <TopResultsSection/>
       </div>
     </div>
     <div class="flex">
@@ -13,7 +18,7 @@
         <RouterLinkButton btnText="Play Game" color="red" url="/game" />
       </div>
        <div class="w-1/2 mt-2">
-        <RouterLinkButton btnText="Top Results" color="pink" url="/account/topResults" />
+        <RouterLinkButton btnText="Top Results" color="pink" />
       </div>
       <div class="w-1/2 mt-2">
         <RouterLinkButton :btnText="chartVisible ? 'Hide Chart' : 'Show Chart'" color="red" @click="toggleChart" v-if="results.length != 0"/>
@@ -29,7 +34,7 @@
     </h1>
   </div>
   <div>
-  <div v-if="chartVisible && results.length > 0">
+  <div class="bg-[#F5d300]" v-if="chartVisible && results.length > 0">
   <div class="container max-w-4xl mx-auto mt-4">
     <Line :data="data" :options="options"/>
   </div>
@@ -39,7 +44,7 @@
     <div class="ms-auto py-4 ml-4">
       <div class="font-bold text-gray-900">
         <div class="mt-4">
-          <div class="relative overflow-x-auto">
+          <div class="relative overflow-x-auto bg-white">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
               <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -52,6 +57,7 @@
                 </tr>
               </thead>
               <tbody>
+            
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for='(result, index) in results' :key='result.id'>
                   <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ index + 1 }}</th>
                   <td class="px-6 py-4">{{ moment(result.created_at).format('DD-MM-YYYY HH:mm:ss') }}</td>
@@ -67,11 +73,13 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 
 <script setup>
 import RouterLinkButton from "../../components/global/RouterLinkButton.vue";
+import TopResultsSection from "../account/TopResultsSection.vue"
 import { useUserStore } from '@/store/user-storage'; 
 import {useResultsStore} from '@/store/result-storage'
 import axios from 'axios';
@@ -237,3 +245,18 @@ switch (true) {
 }
 };
 </script>
+
+<style>
+#imageSection{
+   width: 10cm;
+    height: 10cm;
+    object-fit: cover;
+    border-radius: 60%;
+}
+.img { 
+  background-image: url('~@/assets/back.jpg');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+}
+</style>

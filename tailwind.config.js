@@ -1,5 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
+
+
 module.exports = {
   
   content: [
@@ -8,8 +10,15 @@ module.exports = {
     './src/views/**/*.{vue,js,ts}',
     './src/components/**/*.{vue,js,ts}',
   ],
+  
       theme: {
-        extend: {},
+        extend: {
+        },
+        colors: {
+          beyza: '#08f7fe',
+          // ...
+        }
       },
+      
       plugins: [],
     }
