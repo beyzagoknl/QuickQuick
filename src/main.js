@@ -15,4 +15,12 @@ pinia.use(piniaPluginPersistedstate)
 const app = createApp(App)
 app.use(router)
 app.use(pinia)
+import { useUserStore } from "@/store/user-storage";
+const userStore = useUserStore();
+axios.defaults.withCredentials = true;
+
+if (userStore.token) {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${userStore.token}`;
+}
+
 app.mount('#app')

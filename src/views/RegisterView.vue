@@ -1,10 +1,10 @@
 <template>
   <div id="Register">
-    <div class="w-full p-6 flex justify-center items-center">
+    <div class="w-full high-full p-6 flex justify-center items-center">
       <div class="w-full max-w-xs">
         <div class="bg-black p-8 shadow rounded mb-6">
           <h1 class="mb-6 text-lg text-gray-100 font-thin">
-            Let's get rocking!
+            Let's start!
           </h1>
 
           <div class="mb-4">
@@ -58,7 +58,7 @@
           </div>
        
          <button
-            class="block w-full bg-green-500 text-white roundedn-sm py-3 text-sm tracking-wide"
+            class="block w-full bg-[#ff6f64] text-white rounded mt-10 py-3 text-sm tracking-wide"
             type="submit"
             :disabled= "passwordMismatch"
             @click= "register"
@@ -66,10 +66,10 @@
             Register
           </button>
       </div>
-        <p class="text-center text-md text-gray-900">
+        <p class="text-center text-md text-white">
           Already have an account?
      
-      <router-link to="login" class="text-blue-500 no-underline hover:underline">
+      <router-link to="login" class="text-[#ff6f64] no-underline hover:underline">
         Login
       </router-link>
       </p>
@@ -77,6 +77,11 @@
       
     </div>
   </div>
+    <div id="videoDarkOverlay"></div>
+    <video autoplay muted loop id="myVideo">
+    <source src="../../public/background.mp4" type="video/mp4" />
+  </video>
+
 </template>
 
 
@@ -86,6 +91,7 @@ import axios from 'axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 const apiBaseUrl = process.env.VUE_APP_API_BASE_URL;
+
 
 import {useUserStore} from '../store/user-storage';
 import { useResultsStore } from '@/store/result-storage';
@@ -139,5 +145,28 @@ const register = async () => {
 }
 
 </script>
-<style>
+<style scoped>
+#myVideo {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: -2;
+}
+#videoDarkOverlay {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+  background-color: rgba(0, 0, 0, 0.65);
+}
 </style>

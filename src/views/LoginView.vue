@@ -1,6 +1,6 @@
 <template>
   <div id="Register">
-    <div class="w-full p-6 flex justify-center items-center">
+    <div class="w-full mt-20 p-6 flex justify-center items-center">
       <div class="w-full max-w-xs">
         <div class="bg-black p-8 shadow rounded mb-6">
           <h1 class="mb-6 text-lg text-gray-100 font-thin">
@@ -25,7 +25,7 @@
            />
            </div>
           <button
-            class="block w-full bg-green-500 text-white roundedn-sm py-3 text-sm tracking-wide"
+            class="block w-full bg-[#ff6f64] text-white mt-10 rounded py-3 text-xl tracking-wide"
             type="submit"
             @click="login"
           >
@@ -33,16 +33,20 @@
           </button>
           <p class="text-red-600" >{{invalidError}}</p>
         </div>
-        <p class="text-center text-md text-gray-900">
+        <p class="text-center text-md text-white">
           Don't have an account yet?
-      <router-link to="register" class="text-blue-500 no-underline hover:underline">
+      <router-link to="register" class="text-[#ff6f64] no-underline hover:underline ">
         Register
       </router-link>
       </p>
        </div>
-    
+  
     </div>
   </div>
+      <div id="videoDarkOverlay"></div>
+    <video autoplay muted loop id="myVideo">
+    <source src="../../public/background.mp4" type="video/mp4" />
+  </video>
 </template>
 
 
@@ -55,7 +59,6 @@ import { useRouter } from 'vue-router';
 import { useResultsStore } from '@/store/result-storage';
 const router = useRouter()
 const apiBaseUrl = process.env.VUE_APP_API_BASE_URL;
-//import { setUserLocalStorage } from "@/axios.js";
 
 const userStore = useUserStore();
 const resultsStore = useResultsStore()
@@ -81,7 +84,7 @@ const login = async () => {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
       userStore.setUserDetails(res.data);
       await resultsStore.fetchResults(userStore.id)
-      router.push('/account/profile/')
+      router.push('/profile')
     } else {
       console.error('Response data or user is undefined:', res);
       errors.value = res.data.message
@@ -93,11 +96,30 @@ const login = async () => {
   }
 };
 
-
-
-
-
-
-
-
 </script>
+
+<style scoped>
+#myVideo {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: -2;
+}
+#videoDarkOverlay {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+  background-color: rgba(0, 0, 0, 0.65);
+}
+</style>

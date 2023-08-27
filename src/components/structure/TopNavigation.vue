@@ -1,7 +1,8 @@
 <template>
     <nav class="w-full px-4 bg-black relative z-20 text-white-200">
         <div class="container mx-auto max-w-4xl h-16 flex justify-between text-xs md:text-sm">
-            <div class="h-full flex items-center">
+            <div class="h-full flex gap-4 items-center">
+            <img class="mx-auto max-w-4xl h-12" src= "../../assets/logo.png">
                 <router-link 
                 v-if= !userStore.id
                 to="/"                
@@ -23,6 +24,7 @@
 </template>
 
 <script setup>
+
     import FullScreenModal from './FullScreenModal.vue'
     import { useUserStore } from '@/store/user-storage'; // Adjust the import path
     //import { useRouter } from 'vue-router';

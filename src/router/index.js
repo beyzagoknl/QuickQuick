@@ -3,8 +3,8 @@ import HomeView from "../views/HomeView.vue"
 import RegisterView from "../views/RegisterView.vue"
 import LoginView from "../views/LoginView.vue"
 import GameView from "../views/GameView.vue"
-import ProfileSection from '../views/account/ProfileSection.vue'
-
+import ProfileSection from '../views/ProfileView.vue'
+import { useUserStore } from "@/store/user-storage";
 
 const routes=[
 {
@@ -25,21 +25,15 @@ const routes=[
   {
     path: '/game',
     name: 'game',
+    meta: { requiresAuth: true },
     component: GameView
   },
   {
-    path: '/account',
-    name: 'AccountView',
-    children:[
-      {
-        path: 'profile',
-        name: 'ProfileSection',
-        component: ProfileSection
-      },
-      
- 
-    ]
-  },
+    path: '/profile',
+    name: 'ProfileSection',
+    meta: { requiresAuth: true },
+    component: ProfileSection
+  }
 ]
 
 export const router = createRouter({
@@ -47,4 +41,16 @@ export const router = createRouter({
     routes
   })
   
+
+  router.beforeEach((to, from, next) => {
+    const userStore = useUserStore();
+    const isAuthenticated = !!userStore.token
   
+    if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
+      next({ name: 'login' }); 
+    } else {
+      next(); 
+    }
+  });
+  
+  export default router;

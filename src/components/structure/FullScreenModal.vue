@@ -19,7 +19,7 @@
           class="w-full text-green-100 text-center text-lg mt-5"
           btnText="Profile"
           color="green"
-          url="/account/profile"
+          url="/profile"
         /> 
         <RouterLinkButton
          v-if=userStore.id
@@ -38,6 +38,7 @@
           color="blue"
         />
           <RouterLinkButton
+          v-if=!userStore.id
           @click="open = !open"
           class="w-full text-green-100 text-center text-lg mt-2"
           btnText="Login"
