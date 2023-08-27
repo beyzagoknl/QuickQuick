@@ -19,7 +19,6 @@
               alt="User Image"
               class="rounded-full h-auto max-w-xs m-5"
             />
-          
         </div>
         </div>
         <div class="md:w-1/3 s:w-1/2">
@@ -225,13 +224,7 @@ const deleteResult = async (resultId) => {
     const res = await axios.delete(
       `${apiBaseUrl}/users/${userStore.id}/results/${resultId}`
     );
-    // if (res.status === 204) {
-    //   results.value = results.value.filter((result) => result.id !== resultId);
-    //   console.log(resultId + " deleted");
-    //   createChart();
-    // } else {
-    //   console.error("Failed to delete result", res);
-    // }
+
 if(res.status ===204) {
   try {
     let res = await axios.get(`${apiBaseUrl}/users/${userStore.id}/results`);
