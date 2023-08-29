@@ -1,7 +1,7 @@
 
 # QuickTyper
 
-QuickTyper is a web application that measures how quickly you can type words within a given time limit. It is built using ![Vue.js](https://img.shields.io/badge/vue.js-%2335495e.svg?style=for-the-badge&logo=vue.js) Vue.js, ![Bootstrap](https://img.shields.io/badge/bootstrap-%23563D7C.svg?style=for-the-badge&logo=bootstrap) Bootstrap, and JavaScript.
+QuickTyper is a web application that measures how quickly you can type words within a given time limit. It is built using ![Vue.js](https://img.shields.io/badge/vue.js-%2335495e.svg?style=for-the-badge&logo=vue.js) Vue.js, Tailwind, Php, Laravel, Vue, Pinia.
 
 ## Table of Contents
 - [Demo](#demo)
@@ -12,7 +12,7 @@ QuickTyper is a web application that measures how quickly you can type words wit
 - [License](#license)
 
 ## Demo
-You can check out the live demo of the app [here](https://quicktyper.onrender.com/).
+You can check out the live demo of the app [here]((https://quickquick.pnct.nl/#/)).
 
 ## Features
 - Set a time limit and challenge yourself to type as many words as you can within that time.
