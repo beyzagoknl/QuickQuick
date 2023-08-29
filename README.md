@@ -12,7 +12,7 @@ QuickTyper is a web application that measures how quickly you can type words wit
 - [License](#license)
 
 ## Demo
-You can check out the live demo of the app [here]((https://quickquick.pnct.nl/#/)).
+You can check out the live demo of the app  [QuickQuick](https://quickquick.pnct.nl/#/)
 
 ## Features
 - Set a time limit and challenge yourself to type as many words as you can within that time.
